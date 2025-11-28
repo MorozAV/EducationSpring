@@ -27,9 +27,21 @@
 	<repositories>
 		<repository>
 			<id>vaadin-addons</id>
-			<url>http://maven.vaadin.com/vaadin-addons</url>
+			<url>https://maven.vaadin.com/vaadin-addons</url>
 		</repository>
+        <repository>
+            <id>hand-china-repo</id>
+            <name>HandChinaRepo</name>
+            <url>https://nexus.saas.hand-china.com/content/repositories/rdc/</url>
+        </repository>
 	</repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>hand-china-repo</id>
+            <name>HandChinaRepo</name>
+            <url>https://nexus.saas.hand-china.com/content/repositories/rdc/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -66,7 +78,17 @@
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-themes</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc7</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>2.7.9</version> <!-- Java 8 compatible -->
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>
@@ -123,6 +145,13 @@
 				<configuration>
 					<scanIntervalSeconds>2</scanIntervalSeconds>
 				</configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.oracle</groupId>
+                            <artifactId>ojdbc7</artifactId>
+                            <version>12.1.0.2</version>
+                        </dependency>
+                    </dependencies>
 			</plugin>
 		</plugins>
 	</build>
@@ -138,7 +167,7 @@
 			<repositories>
 				<repository>
 					<id>vaadin-prereleases</id>
-					<url>http://maven.vaadin.com/vaadin-prereleases</url>
+					<url>https://maven.vaadin.com/vaadin-prereleases</url>
 				</repository>
 				<repository>
 					<id>vaadin-snapshots</id>
@@ -154,7 +183,7 @@
 			<pluginRepositories>
 				<pluginRepository>
 					<id>vaadin-prereleases</id>
-					<url>http://maven.vaadin.com/vaadin-prereleases</url>
+					<url>https://maven.vaadin.com/vaadin-prereleases</url>
 				</pluginRepository>
 				<pluginRepository>
 					<id>vaadin-snapshots</id>

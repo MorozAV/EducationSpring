@@ -1,5 +1,6 @@
 package com.alexfess.educationspring;
 
+import javax.naming.NamingException;
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
@@ -11,6 +12,8 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+
+import java.sql.*;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -32,7 +35,7 @@ public class MyUI extends UI {
         Button button = new Button("Click Me");
         button.addClickListener(e -> {
             layout.addComponent(new Label("Thanks " + name.getValue() 
-                    + ", it works!"));
+                    + ", it works!" + testDb()));
         });
         
         layout.addComponents(name, button);
@@ -43,5 +46,23 @@ public class MyUI extends UI {
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
     public static class MyUIServlet extends VaadinServlet {
+    }
+
+    private String testDb() {
+        String result = "Соединение с БД не установлено";
+        try (Connection cn = DataProvider.getConnection();
+             PreparedStatement ps = cn.prepareStatement("select dummy from dual");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                if (!rs.getString(1).isEmpty()) {
+                    result = "Соединение с БД успешно установлено";
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (NamingException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
     }
 }
