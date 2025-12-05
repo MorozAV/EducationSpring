@@ -15,13 +15,14 @@ import java.util.StringJoiner;
 @EqualsAndHashCode
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class DdlHistory implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
      * идентификатор
      */
-    private int id;
+    private long id;
     /**
      * Тип объекта: 'TABLE', 'SYNONYM', 'INDEX' и так далее
      */
