@@ -19,15 +19,11 @@ import java.util.Optional;
  * Этот класс обрабатывает операции с базой данных, связанные с сущностями {@link DdlHistory}.
  */
 @Log
-public abstract class DdlHistoryDaoImpl implements DdlHistoryDao {
-
-    public DdlHistoryDaoImpl() {
-        throw new UnsupportedOperationException("This class is abstract");
-    }
+public class DdlHistoryDaoImpl implements DdlHistoryDao {
 
     @Override
     public @NotNull List<DdlHistory> findAll() {
-        final String query = "SELECT * FROM ddl_history";
+        final String query = "select * from moroz.ddl_history";
         List<DdlHistory> list = new ArrayList<>();
         try (Connection cn = DataProvider.getConnection();
              PreparedStatement ps = cn.prepareStatement(query);
@@ -37,7 +33,8 @@ public abstract class DdlHistoryDaoImpl implements DdlHistoryDao {
             }
             log.info("Found " + list.size() + " records");
         } catch (Exception e) {
-            log.severe(e.getMessage());
+            //Не бросаем ошибку дальше, чтобы вернуть пустой список
+            log.severe("Error fetching all records: " + e.getMessage());
         }
         return list;
     }
