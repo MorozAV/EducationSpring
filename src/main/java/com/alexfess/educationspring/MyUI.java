@@ -3,6 +3,9 @@ package com.alexfess.educationspring;
 import javax.naming.NamingException;
 import javax.servlet.annotation.WebServlet;
 
+import com.alexfess.educationspring.dao.DdlHistoryDao;
+import com.alexfess.educationspring.dao.impl.DdlHistoryDaoImpl;
+import com.alexfess.educationspring.model.DdlHistory;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -14,6 +17,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import java.sql.*;
+import java.util.List;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -49,20 +53,8 @@ public class MyUI extends UI {
     }
 
     private String testDb() {
-        String result = "Соединение с БД не установлено";
-        try (Connection cn = DataProvider.getConnection();
-             PreparedStatement ps = cn.prepareStatement("select dummy from dual");
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                if (!rs.getString(1).isEmpty()) {
-                    result = "Соединение с БД успешно установлено";
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (NamingException e) {
-            throw new RuntimeException(e);
-        }
-        return result;
+        DdlHistoryDao dao = new DdlHistoryDaoImpl();
+        List<DdlHistory> records = dao.findAll();
+        return "Найдено записей: " + records.size();
     }
 }

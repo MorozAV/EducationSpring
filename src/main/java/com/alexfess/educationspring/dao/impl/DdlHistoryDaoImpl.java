@@ -23,7 +23,7 @@ public class DdlHistoryDaoImpl implements DdlHistoryDao {
 
     @Override
     public @NotNull List<DdlHistory> findAll() {
-        final String query = "select * from moroz.ddl_history";
+        final String query = "select * from moroz.ddl_hist";
         List<DdlHistory> list = new ArrayList<>();
         try (Connection cn = DataProvider.getConnection();
              PreparedStatement ps = cn.prepareStatement(query);
