@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,8 +19,11 @@ import java.util.Optional;
  * Этот класс обрабатывает операции с базой данных, связанные с сущностями {@link DdlHistory}.
  */
 @Log
-public class DdlHistoryDaoImpl implements DdlHistoryDao {
+public abstract class DdlHistoryDaoImpl implements DdlHistoryDao {
 
+    public DdlHistoryDaoImpl() {
+        throw new UnsupportedOperationException("This class is abstract");
+    }
 
     @Override
     public @NotNull List<DdlHistory> findAll() {
@@ -29,25 +33,36 @@ public class DdlHistoryDaoImpl implements DdlHistoryDao {
              PreparedStatement ps = cn.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                list.add(new DdlHistory(rs.getLong("id")
-                        , rs.getString("object_type")
-                        , rs.getString("owner")
-                        , rs.getString("object_name")
-                        , rs.getString("user_name")
-                        , rs.getTimestamp("ddl_date").toLocalDateTime()
-                        , rs.getString("ddl_type")
-                        , rs.getString("client_os_user")
-                        , rs.getString("ddl_txt")
-                        , rs.getString("stack")
-                        , rs.getString("client_ip_address")
-                        , rs.getString("client_host")
-                        , rs.getString("client_module")));
+                list.add(mapRow(rs));
             }
             log.info("Found " + list.size() + " records");
         } catch (Exception e) {
             log.severe(e.getMessage());
         }
         return list;
+    }
+
+    /**
+     * Преобразует строку из ResultSet в объект DdlHistory.
+     *
+     * @param rs ResultSet, содержащий данные строки
+     * @return объект DdlHistory, заполненный данными из ResultSet
+     * @throws SQLException если возникает ошибка при доступе к ResultSet
+     */
+    private static @NotNull DdlHistory mapRow(ResultSet rs) throws SQLException {
+        return new DdlHistory(rs.getLong("id")
+                , rs.getString("object_type")
+                , rs.getString("owner")
+                , rs.getString("object_name")
+                , rs.getString("user_name")
+                , rs.getTimestamp("ddl_date").toLocalDateTime()
+                , rs.getString("ddl_type")
+                , rs.getString("client_os_user")
+                , rs.getString("ddl_txt")
+                , rs.getString("stack")
+                , rs.getString("client_ip_address")
+                , rs.getString("client_host")
+                , rs.getString("client_module"));
     }
 
     @Override
