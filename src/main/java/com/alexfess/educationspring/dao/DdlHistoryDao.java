@@ -60,6 +60,7 @@ public interface DdlHistoryDao {
      * @param userName имя пользователя. Не пустая строка
      * @return список записей. Если записей нет, то вернуть пустой список.
      */
+    @NotNull
     List<DdlHistory> findByUserName(@NotNull String userName);
 
     /**
