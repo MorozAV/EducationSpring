@@ -1,16 +1,19 @@
 package com.alexfess.educationspring.dao;
 
 import com.alexfess.educationspring.model.DdlHistory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * DAO для работы с историей DDL операций
  */
 public interface DdlHistoryDao {
     /**
-     * @return Получить все записи
+     * @return Получить все записи, если записей нет, то вернуть пустой список
      */
+    @NotNull
     List<DdlHistory> findAll();
 
     /**
@@ -19,21 +22,21 @@ public interface DdlHistoryDao {
      * @param id идентификатор записи
      * @return запись по ID
      */
-    DdlHistory findById(long id);
+    Optional<DdlHistory> findById(long id);
 
     /**
      * Сохранить новую запись
      *
      * @param ddlHistory запись для сохранения
      */
-    void save(DdlHistory ddlHistory);
+    void save(@NotNull DdlHistory ddlHistory);
 
     /**
      * Обновить существующую запись
      *
      * @param ddlHistory запись для обновления
      */
-    void update(DdlHistory ddlHistory);
+    void update(@NotNull DdlHistory ddlHistory);
 
     /**
      * Удалить запись по ID
@@ -45,18 +48,19 @@ public interface DdlHistoryDao {
     /**
      * Найти записи по типу DDL операции
      *
-     * @param ddlType тип DDL операции
-     * @return список записей
+     * @param ddlType тип DDL операции, не пустая строка
+     * @return список записей. Если записей нет, то вернуть пустой список.
      */
-    List<DdlHistory> findByDdlType(String ddlType);
+    @NotNull
+    List<DdlHistory> findByDdlType(@NotNull String ddlType);
 
     /**
      * Найти записи по имени пользователя
      *
-     * @param userName имя пользователя
-     * @return список записей
+     * @param userName имя пользователя. Не пустая строка
+     * @return список записей. Если записей нет, то вернуть пустой список.
      */
-    List<DdlHistory> findByUserName(String userName);
+    List<DdlHistory> findByUserName(@NotNull String userName);
 
     /**
      * Получить общее количество записей
