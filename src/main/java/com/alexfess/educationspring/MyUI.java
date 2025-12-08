@@ -111,7 +111,7 @@ public class MyUI extends UI {
     }
 
     private String testDb() {
-        List<DdlHistory> records = dao.findAll();
-        return "Найдено записей: " + records.size();
+        long records = dao.count();
+        return "Найдено записей: " + records;
     }
 }

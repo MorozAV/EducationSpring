@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 /**
@@ -144,6 +143,20 @@ public class DdlHistoryDaoImpl implements DdlHistoryDao {
 
     @Override
     public long count() {
-        return 0;
+        String sql = "select count(*) from moroz.ddl_hist";
+
+        try (Connection cn = DataProvider.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                long count = rs.getLong(1);  // Получаем первую колонку
+                log.info("Total records count: " + count);
+                return count;
+            }
+        } catch (Exception e) {
+            log.severe("Error counting records: " + e.getMessage());
+        }
+        return 0;  // Возвращаем 0 при ошибке
     }
 }
