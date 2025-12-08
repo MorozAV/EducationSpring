@@ -73,13 +73,14 @@ public class DdlHistoryDaoImpl implements DdlHistoryDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    log.info("Found record by id=" + id);
                     return Optional.of(mapRow(rs));
                 }
             }
         } catch (Exception e) {
             log.severe("Error finding record by id=" + id + ": " + e.getMessage());
         }
-
+        log.info("Record not found by id=" + id);
         return Optional.empty();
     }
 
@@ -100,12 +101,45 @@ public class DdlHistoryDaoImpl implements DdlHistoryDao {
 
     @Override
     public @NotNull List<DdlHistory> findByDdlType(@NotNull String ddlType) {
-        return Collections.emptyList();
+        String sql = "select * from moroz.ddl_hist where ddl_type = ? order by id";
+        List<DdlHistory> list = new ArrayList<>();
+        try(Connection cn = DataProvider.getConnection();
+            PreparedStatement ps = cn.prepareStatement(sql)){
+            ps.setString(1, ddlType);
+            try(ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+                    list.add(mapRow(rs));
+                }
+                log.info("Found by ddlType="+ddlType + ": " + list.size() + " records");
+                return list;
+            }
+        }
+        catch(Exception e){
+            log.severe("Error finding records by ddlType=" + ddlType + ": " + e.getMessage());
+        }
+        log.info("Not found by ddlType="+ddlType + " records");
+        return list;
     }
 
     @Override
     public @NotNull List<DdlHistory> findByUserName(@NotNull String userName) {
-        return Collections.emptyList();
+        String sql = "select * from moroz.ddl_hist where upper(user_name) like ? order by id";
+        List<DdlHistory> list = new ArrayList<>();
+        try (Connection cn = DataProvider.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, "%" + userName.toUpperCase() + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapRow(rs));
+                }
+                log.info("Found by userName=" + userName + ": " + list.size() + " records");
+                return list;
+            }
+        } catch (Exception e) {
+            log.severe("Error finding records by userName=" + userName + ": " + e.getMessage());
+        }
+        log.info("Not found by userName=" + userName + " records");
+        return list;
     }
 
     @Override

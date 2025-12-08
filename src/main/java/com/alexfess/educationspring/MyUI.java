@@ -59,8 +59,48 @@ public class MyUI extends UI {
                 Notification.show("Ошибка: " + ex.getMessage(), Notification.Type.ERROR_MESSAGE);
             }
         });
-        
-        layout.addComponents(name, button, id, btFindById);
+
+        final TextField tfUserName = new TextField("Укажите имя пользователя для поиска по нему: ");
+        final Button btFindByUserName = new Button("Найти по имени пользователя");
+        btFindByUserName.addClickListener(e -> {
+            try {
+                String userName = tfUserName.getValue();
+                if(userName.isEmpty()) {
+                    Notification.show("Имя пользователя не может быть пустым");
+                    return;
+                }
+                List<DdlHistory> rows =  dao.findByUserName(userName);
+                if(!rows.isEmpty()) {
+                    Notification.show("Найдено записей: " + rows.size());
+                } else {
+                    Notification.show("Записи не найдены");
+                }
+            } catch (Exception ex) {
+                log.severe(ex.getMessage());
+                Notification.show("Ошибка: " + ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+            }
+        });
+        final TextField tfDdlType = new TextField("Укажите тип операции для поиска по ней: ");
+        final Button btFindByDdlType = new Button("Найти по типу операции");
+        btFindByDdlType.addClickListener(e -> {
+            try {
+                String ddlType = tfDdlType.getValue();
+                if(ddlType.isEmpty()) {
+                    Notification.show("Тип операции не может быть пустым");
+                    return;
+                }
+                List<DdlHistory> rows =  dao.findByDdlType(ddlType);
+                if(!rows.isEmpty()) {
+                    Notification.show("Найдено записей: " + rows.size());
+                } else {
+                    Notification.show("Записи не найдены");
+                }
+            } catch (Exception ex) {
+                log.severe(ex.getMessage());
+                Notification.show("Ошибка: " + ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+            }
+        });
+        layout.addComponents(name, button, id, btFindById, tfUserName, btFindByUserName, tfDdlType, btFindByDdlType);
         
         setContent(layout);
     }
