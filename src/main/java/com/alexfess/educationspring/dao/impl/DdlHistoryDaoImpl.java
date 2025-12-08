@@ -64,6 +64,22 @@ public class DdlHistoryDaoImpl implements DdlHistoryDao {
 
     @Override
     public Optional<DdlHistory> findById(long id) {
+        final String sql = "SELECT * FROM moroz.DDL_HIST WHERE ID = ?";
+
+        try (Connection cn = DataProvider.getConnection();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(mapRow(rs));
+                }
+            }
+        } catch (Exception e) {
+            log.severe("Error finding record by id=" + id + ": " + e.getMessage());
+        }
+
         return Optional.empty();
     }
 
