@@ -6,13 +6,13 @@ import com.alexfess.educationspring.model.DdlHistory;
 import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.naming.NamingException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+
 /**
  * Реализация {@link DdlHistoryDao}, которая предоставляет методы для доступа к записям истории DDL.
  * Этот класс обрабатывает операции с базой данных, связанные с сущностями {@link DdlHistory}.
@@ -93,9 +93,31 @@ public class DdlHistoryDaoImpl implements DdlHistoryDao {
 
     }
 
+    /**
+     * Удаляет запись из таблицы moroz.ddl_hist по заданному идентификатору.
+     * @param id    идентификатор записи для удаления
+     */
     @Override
-    public void delete(long id) {
-
+    public void delete(long id) throws SQLException, NamingException {
+        String sql = "delete from moroz.ddl_hist where id = ?";
+        try (Connection cn = DataProvider.getConnection()) {
+            try (PreparedStatement ps = cn.prepareStatement(sql)) {
+                ps.setLong(1, id);
+                int countDeletedRows = ps.executeUpdate();
+                if (countDeletedRows == 1) {
+                    cn.commit();
+                    log.info("Строка ddl_hist с id=" + id + " успешно удалена.");
+                } else {
+                    log.severe("Ошибка при удалении ddl_hist: " + countDeletedRows + " строк удалено, ожидалось 1. id=" + id);
+                    cn.rollback();
+                    throw new RuntimeException("Ошибка при удалении ddl_hist: " + countDeletedRows + " строк удалено, ожидалось 1. id=" + id);
+                }
+            } catch (SQLException e) {
+                cn.rollback();
+                log.log(Level.SEVERE,"Исключение при удалении ddl_hist by id=" + id, e);
+                throw e;
+            }
+        }
     }
 
     @Override

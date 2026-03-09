@@ -3,6 +3,8 @@ package com.alexfess.educationspring.dao;
 import com.alexfess.educationspring.model.DdlHistory;
 import org.jetbrains.annotations.NotNull;
 
+import javax.naming.NamingException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +45,7 @@ public interface DdlHistoryDao {
      *
      * @param id идентификатор записи
      */
-    void delete(long id);
+    void delete(long id) throws SQLException, NamingException;
 
     /**
      * Найти записи по типу DDL операции
