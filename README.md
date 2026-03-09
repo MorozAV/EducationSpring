@@ -173,7 +173,7 @@ create table moroz.DDL_HIST (
 
 | Этап | Название | Статус | Заданий | Выполнено |
 |------|----------|--------|---------|-----------|
-| 1 | Foundation (Vaadin 8 + JDBC) | 🔄 In Progress | 12 | 2/12 |
+| 1 | Foundation (Vaadin 8 + JDBC) | 🔄 In Progress | 12 | 5/12 |
 | 2 | Spring Boot Integration | ⏳ Pending | ~15 | 0/15 |
 | 3 | Alternative DB Technologies | ⏳ Pending | ~20 | 0/20 |
 | 4 | Jobs & Classification | ⏳ Pending | ~10 | 0/10 |
@@ -189,9 +189,14 @@ create table moroz.DDL_HIST (
 
 | # | Задание | Технологии | Статус | Дата | Заметки |
 |---|---------|------------|--------|------|---------|
-| 1.1 | Создать git репозиторий | Git | ✅ Done | 23.11.2024 | Initial commit |
-| 1.2 | Создать Maven проект | Maven, Java 8 | 🔄 In Progress | - | - |
-| 1.3 | Настроить Oracle подключение | JDBC, Oracle | ⏳ Pending | - | - |
+| 1.1 | Создать git репозиторий и структуру проекта | Git, GitHub | ✅ Done | 24.11.2024 | Initial commit |
+| 1.2 | Создать Maven проект с Vaadin 8 | Maven, Java 8, Vaadin 8 | ✅ Done | 24.11.2024 | Компилируется успешно |
+| 1.3 | Добавить Oracle JDBC драйвер | Maven, Oracle, HikariCP | ✅ Done | 05.12.2024 | Бонус: Connection Pool + ConfigLoader |
+| 1.4 | Создать Entity класс DdlHistory | Java 8, Lombok, POJO | ✅ Done | 05.12.2024 | Lombok + JetBrains annotations |
+| 1.5 | Создать DAO интерфейс DdlHistoryDao | JDBC, DAO Pattern | ✅ Done | 05.12.2024 | Optional + @NotNull annotations |
+| 1.6 | Реализовать findAll() метод | JDBC, PreparedStatement | 🔄 In Progress | - | - |
+| 1.7 | Реализовать findById() метод | JDBC, PreparedStatement | ⏳ Pending | - | - |
+| 1.8 | Реализовать save() метод | JDBC, PreparedStatement|⏳ Pending| - | - |
 ```
 
 **Важно:**
